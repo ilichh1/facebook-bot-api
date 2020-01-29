@@ -71,7 +71,7 @@ function handleMessage(sender_psid, received_message) {
 }
 
 function handlePostback(sender_psid, received_postback) {
-  console.log('Gandling a Postback!');
+  console.log('Handling a Postback!');
   const response = {};
   // Get the payload for the postback
   let { payload } = received_postback;
@@ -85,8 +85,12 @@ function handlePostback(sender_psid, received_postback) {
 
   switch(payload) {
     case 'ver_productos':
-      response['text'] = productsArrayToCommaSeparatedString(getAllProducts());
-      break;
+      getAllProductsAsCsv()
+      .then(text => {
+        response['text'] = text;
+        callSendAPI(sender_psid, response);
+      });
+      return;
     default:
       response['text'] = 'Uh! Lo siento, no te entendí.'
   }
@@ -118,17 +122,16 @@ function callSendAPI(sender_psid, response) {
   }); 
 }
 
-async function getAllProducts() {
-  let arr;
-  try {
-    arr = await Product.find();
-  } catch (e) {
-    console.log('Error on "getAllProducts" while performing "find" function.');
-    arr = [
-      { name: 'Producto por default' }
-    ];
-  }
-  return arr;
+function getAllProductsAsCsv() {
+  return Product
+    .find()
+    .then(products => {
+      return Promise.resolve(productsArrayToCommaSeparatedString(products));
+    })
+    .catch(error => {
+      console.log('DB ERROR: ', error);
+      return Promise.resolve('Oops! algo salió mal');
+    });
 }
 
 function productsArrayToCommaSeparatedString(productsArray) {
