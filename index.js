@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const authRouter = require('./api/auth/index');
+const settingsRouter = require('./api/settings/index');
 
 const DB_CONNECTION = 'mongodb+srv://admin:IF3Tn81Z23rOfXey@firstcluster-chz9d.mongodb.net/test?ssl=true&retryWrites=true&w=majority';
 mongoose.connect(DB_CONNECTION, {
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/settings', settingsRouter);
 app.use('/auth', authRouter);
 app.all('/', (req, res) => {
   res.send({
