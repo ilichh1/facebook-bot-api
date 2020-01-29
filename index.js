@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 
 const authRouter = require('./api/auth/index');
 
-const DB_CONNECTION = 'mongodb+srv://admin:IF3Tn81Z23rOfXey@firstcluster-chz9d.mongodb.net/test';
+const DB_CONNECTION = 'mongodb+srv://admin:IF3Tn81Z23rOfXey@firstcluster-chz9d.mongodb.net/test?ssl=true&retryWrites=true&w=majority';
 mongoose.connect(DB_CONNECTION, {
   useUnifiedTopology: true
 });
