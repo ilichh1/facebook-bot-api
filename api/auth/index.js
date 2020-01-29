@@ -4,6 +4,7 @@ const crearJwt = require('../../utils/jwtFunctions').crearJwt;
 
 authRouter.post('/', (req, res) => {
   const { username = null, password = null } = req.body;
+  console.log(`USERNAME: ${username}, PASS: ${password}`);
   const handleError = () => res
     .status(500)
     .json(
