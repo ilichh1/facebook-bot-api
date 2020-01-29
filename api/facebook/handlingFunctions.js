@@ -9,14 +9,13 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     response = {
-      "text": '¡Mi nombre es Robotín!',
       "attachment": {
         "type": "template",
         "payload": {
           "template_type": "generic",
           "elements": [{
             "title": "\n¡Bienvenido!",
-            "subtitle": "¿Quiere ver nuestro cátalogo de productos?",
+            "subtitle": "¡Mi nombre es Robotín! ¿Quiere ver nuestro cátalogo de productos?",
             // "image_url": attachment_url,
             "buttons": [
               {
@@ -72,17 +71,10 @@ function handleMessage(sender_psid, received_message) {
 }
 
 function handlePostback(sender_psid, received_postback) {
-  console.log('Handling a Postback!');
-  const response = {};
   // Get the payload for the postback
   let { payload } = received_postback;
-
-  // Set the response based on the postback payload
-  // if ( === 'yes') {
-  //   response = { "text": "Thanks!" }
-  // } else if (payload === 'no') {
-  //   response = { "text": "Oops, try sending another image." }
-  // }
+  console.log('Handling a Postback!: ', payload);
+  const response = {};
 
   switch(payload) {
     case 'ver_productos':
