@@ -14,7 +14,7 @@ function handleMessage(sender_psid, received_message) {
         "payload": {
           "template_type": "generic",
           "elements": [{
-            "title": "Bienvenido!",
+            "title": "\n¡Bienvenido!",
             "subtitle": "¿Quiere ver nuestro cátalogo de productos?",
             // "image_url": attachment_url,
             "buttons": [
@@ -85,9 +85,16 @@ function handlePostback(sender_psid, received_postback) {
 
   switch(payload) {
     case 'ver_productos':
-      getAllProductsAsCsv()
-      .then(text => {
-        response['text'] = text;
+      getAllProducts()
+      .then(products => {
+        // response['text'] = text;
+          response['attachment'] = {
+            type: 'template',
+            payload: {
+              template_type: 'generic',
+              elements: products.map(dbProductToFacebookMessage)
+            }
+        };
         callSendAPI(sender_psid, response);
       });
       return;
@@ -120,6 +127,28 @@ function callSendAPI(sender_psid, response) {
       console.error("Unable to send message:" + err);
     }
   }); 
+}
+
+function dbProductToFacebookMessage(product) {
+  return {
+    title: product.name,
+    subtitle: product.description,
+    image_url: product.image,
+    buttons: [{
+      type: 'postback',
+      title: 'Más información',
+      payload: `more_info_product_${product['_id']}`
+    }]
+  };
+}
+
+getAllProducts() {
+  return Product.find()
+    .then(p => p)
+    .catch(error => {
+      console.log('DB ERROR: ', error);
+      return Promise.resolve([{name: 'Producto por default'}]);
+    });
 }
 
 function getAllProductsAsCsv() {
