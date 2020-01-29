@@ -78,7 +78,7 @@ facebookRouter.get('/webhook', (req, res) => {
       res.sendStatus(403);      
     }
   }
-  req.send({
+  res.send({
     error: {
       message: 'Algo salió mal.'
     }
