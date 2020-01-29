@@ -6,7 +6,7 @@ const authRouter = require('./api/auth/index');
 const settingsRouter = require('./api/settings/index');
 const facebookRouter = require('./api/facebook/index');
 
-const DB_CONNECTION = 'mongodb+srv://admin:IF3Tn81Z23rOfXey@firstcluster-chz9d.mongodb.net/test?ssl=true&retryWrites=true&w=majority';
+const DB_CONNECTION = process.env.DB_CONNECTION_STRING;
 mongoose.connect(DB_CONNECTION, {
   useUnifiedTopology: true
 });
