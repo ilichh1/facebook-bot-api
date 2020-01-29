@@ -39,4 +39,9 @@ app.all('/', (req, res) => {
   });
 });
 
-app.listen(PORT, () => console.log('The app is running on ' + PORT));
+app.listen(PORT, () =>
+  console.log(
+    'The app is running on ' + PORT,
+    `\n${process.env.APP_SUCCESS_STRING}`
+    )
+);

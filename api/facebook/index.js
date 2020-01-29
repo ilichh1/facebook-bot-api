@@ -12,7 +12,7 @@
 const request = require('request');
 const facebookRouter = require('express').Router();
 
-const PAGE_ACCESS_TOKEN = 'EAATr66jFOSoBANeW9dKWCGy1aDTy8DGINltVRNXD9sVBWf1MWTNRv0UFh1hDD2PTBkAyg5qUwcfUIwCICx4LgZB1f9UnvDGFVOhQNgT20XzO61huxHHIFBjxuKt0oXoAcc8UMWIElsVTUNasxgPcmG2d0muZCNA60kQwAldgZDZD';
+const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 
 // Accepts POST requests at /webhook endpoint
 facebookRouter.post('/webhook', (req, res) => {  
@@ -56,7 +56,7 @@ facebookRouter.post('/webhook', (req, res) => {
 facebookRouter.get('/webhook', (req, res) => {
   
   /** UPDATE YOUR VERIFY TOKEN **/
-  const VERIFY_TOKEN = "<YOUR VERIFY TOKEN>";
+  const VERIFY_TOKEN = process.env.FACEBOOK_VERIFY_STRING;
   
   // Parse params from the webhook verification request
   let mode = req.query['hub.mode'];
@@ -78,6 +78,11 @@ facebookRouter.get('/webhook', (req, res) => {
       res.sendStatus(403);      
     }
   }
+  req.send({
+    error: {
+      message: 'Algo salió mal.'
+    }
+  });
 });
 
 function handleMessage(sender_psid, received_message) {
