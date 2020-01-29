@@ -142,7 +142,7 @@ function dbProductToFacebookMessage(product) {
   };
 }
 
-getAllProducts() {
+function getAllProducts() {
   return Product.find()
     .then(p => p)
     .catch(error => {
