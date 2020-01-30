@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const SettingSchema = new mongoose.Schema({
     _id: mongoose.SchemaTypes.ObjectId,
-    nombre:String,
+    nombre: String,
     status: Boolean,
     creationDate: mongoose.Schema.Types.Date,
     changedDate: mongoose.Schema.Types.Date,

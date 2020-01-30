@@ -1,5 +1,7 @@
 const request = require('request');
 const Product = require('../../models/product');
+const Setting = require('../../models/setting');
+
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 
 function handleMessage(sender_psid, received_message) {
@@ -8,31 +10,34 @@ function handleMessage(sender_psid, received_message) {
   if (received_message.text) {    
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
-    response = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "generic",
-          "elements": [{
-            "title": "\n¡Bienvenido!",
-            "subtitle": "¡Mi nombre es Robotín! ¿Quiere ver nuestro cátalogo de productos?",
-            // "image_url": attachment_url,
-            "buttons": [
-              {
-                "type": "postback",
-                "title": "¡Sí! 😉",
-                "payload": "ver_productos",
-              },
-              {
-                "type": "postback",
-                "title": "¡No! 😞",
-                "payload": "no_hacer_nada",
-              }
-            ],
-          }]
+    Setting.findOne().then(({nombre}) => {
+      response = {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": [{
+              "title": "\n¡Bienvenido!",
+              "subtitle": `¡Mi nombre es ${nombre}! ¿Quiere ver nuestro cátalogo de productos?`,
+              // "image_url": attachment_url,
+              "buttons": [
+                {
+                  "type": "postback",
+                  "title": "¡Sí! 😉",
+                  "payload": "ver_productos",
+                },
+                {
+                  "type": "postback",
+                  "title": "¡No! 😞",
+                  "payload": "no_hacer_nada",
+                }
+              ],
+            }]
+          }
         }
       }
-    }
+      callSendAPI(sender_psid, response);
+    });
   }// End 'if'
   
   /* // If the received message has attachments:
@@ -67,7 +72,7 @@ function handleMessage(sender_psid, received_message) {
   } */
  
   // Send the response message
-  callSendAPI(sender_psid, response);    
+  // callSendAPI(sender_psid, response);
 }
 
 function handlePostback(sender_psid, received_postback) {
